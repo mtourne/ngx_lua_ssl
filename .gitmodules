@@ -1,0 +1,3 @@
+[submodule "lua/libs/shcache"]
+	path = lua/libs/shcache
+	url = https://github.com/mtourne/ngx.shcache
