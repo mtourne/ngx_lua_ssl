@@ -55,8 +55,6 @@ For this demonstration, let's just edit `/etc/hosts` and add a few entries :
 127.0.0.1       foo.com
 127.0.0.1       example.foo.com
 127.0.0.1       blog.foo.com
-127.0.0.1       baz.com
-127.0.0.1       bar.com
 ```
 
 
@@ -64,13 +62,21 @@ Generate some certs with Vault
 ==============================
 https://www.vaultproject.io/docs/secrets/pki/
 
-`$ vault server -dev`
+```sh
+$ vault server -dev
 
-`$ vault mount pki`
-`$ vault mount-tune -max-lease-ttl=87600h pki`
-`$ vault write pki/root/generate/internal common_name=star ttl=87600h > star_ca.pub.pki`
-`$ vault write pki/roles/anything allow_any_name=true`
-`$ vault write pki/issue/anything common_name=blah.com > blah.com.pki`
+$ vault mount pki
+$ vault mount-tune -max-lease-ttl=87600h pki
+
+$ vault write pki/root/generate/internal common_name=star ttl=87600h > star_ca.pub.pki
+$ vault write pki/roles/anything allow_any_name=true
+
+# write certs for our /etc/hosts entries
+$ vault write pki/issue/anything common_name=blah.com > blah.com.pki
+
+# write a wildcard cert
+$ vault write pki/issue/anything common_name=*.foo.com > *.foo.com.pki
+```
 
 We're writing to `.pki` files, since vault outputs the certificate and
 the key in one single file. We'll simply use an editor to separate
@@ -109,6 +115,7 @@ Let's start with `blah.com`
 ```
 
 `$ nginx -p `pwd` -c conf/nginx_static.conf`
+
 `$ curl 'https://blah.com:8443' --cacert conf/certs/star_ca.pem
 Hello world!
 `
@@ -133,6 +140,7 @@ Let's now add another host in the configuration
 ```
 
 `$ nginx -p `pwd` -c conf/nginx_static.conf -s reload`
+
 `$ curl 'https://blah.com:8443' --cacert conf/certs/star_ca.pem
 Hello world!`
 `$ curl 'https://foo.com:8443' --cacert conf/certs/star_ca.pem
