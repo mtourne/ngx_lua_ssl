@@ -96,7 +96,7 @@ restart of Nginx.
 
 Let's start with `blah.com`
 
-```
+```nginx
     # blah.com virtual server
     server {
         listen *:8443;
@@ -114,15 +114,15 @@ Let's start with `blah.com`
      }
 ```
 
-`$ nginx -p `pwd` -c conf/nginx_static.conf`
+``$ nginx -p `pwd` -c conf/nginx_static.conf``
 
-`$ curl 'https://blah.com:8443' --cacert conf/certs/star_ca.pem
-Hello world!
-`
+`$ curl 'https://blah.com:8443' --cacert conf/certs/star_ca.pem`
+> Hello world!
+
 
 Let's now add another host in the configuration
 
-```
+```nginx
     # foo.com virtual server
     server {
        listen *:8443;
@@ -139,7 +139,7 @@ Let's now add another host in the configuration
     }
 ```
 
-`$ nginx -p `pwd` -c conf/nginx_static.conf -s reload`
+``$ nginx -p `pwd` -c conf/nginx_static.conf -s reload``
 
 `$ curl 'https://blah.com:8443' --cacert conf/certs/star_ca.pem`
 > Hello world!
@@ -177,7 +177,7 @@ not found a wildcard certificate. (eg. first blog.mycompany.com, then
 '*.mycompany.com'). Certs are then cached in shared memory using
 ngx.shcache [3], a module I wrote some time ago.
 
-`$ nginx -p `pwd` -c conf/nginx_dynamic.conf`
+``$ nginx -p `pwd` -c conf/nginx_dynamic.conf``
 
 Using the dedicated example.foo.com cert :
 `$ curl 'https://example.foo.com:8443' --cacert conf/certs/star_ca.pem`
