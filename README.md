@@ -17,12 +17,13 @@ https. After all it's 2016 and free options for certs are abundant. So
 there is no excuse, right ?
 
 But it's not that simple. Serving SSL traffic for multiple hosts out
-of the edge node has never been trivial. Server Name Indication (SNI),
+of the edge node has never been
+trivial. [Server Name Indication (SNI)](https://en.wikipedia.org/wiki/Server_Name_Indication),
 is an extension of TLS acting like the Host header for HTTP that
 enables us to do this. It was actually not part of the original SSL
-spec, and was later added in 2003 [1], and for the rest of this we'll
-disregard the fact that there are still web browsers out there that do
-not support it [2].
+spec, and was later added in 2003, and for the rest of this we'll
+disregard the fact that there are still
+[web browsers out there that do not support it](https://cloudflare.github.io/sni-visualization/).
 
 Doing this with a stock Nginx we'd be required to modify the conf and
 hot reload Nginx for any cert modification, which can become quite
@@ -175,7 +176,8 @@ In the code example that comes along we'll attempt to load
 certificates from files, we'll first lookup the exact hostname, and if
 not found a wildcard certificate. (eg. first blog.mycompany.com, then
 '*.mycompany.com'). Certs are then cached in shared memory using
-ngx.shcache [3], a module I wrote some time ago.
+[ngx.shcache](https://github.com/mtourne/ngx.shcache), a module I
+wrote some time ago.
 
 ``$ nginx -p `pwd` -c conf/nginx_dynamic.conf``
 
@@ -190,11 +192,3 @@ Using a generic *.foo.com cert :
 
 Voila! We've made a simple SSL termination at the edge which doesn't
 need to hot-reload Nginx all the time.
-
-
-Links
-=====
-
-[1] https://en.wikipedia.org/wiki/Server_Name_Indication
-[2] https://cloudflare.github.io/sni-visualization/
-[3] https://github.com/mtourne/ngx.shcache
