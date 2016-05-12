@@ -75,7 +75,7 @@ $ vault write pki/roles/anything allow_any_name=true
 $ vault write pki/issue/anything common_name=blah.com > blah.com.pki
 
 # write a wildcard cert
-$ vault write pki/issue/anything common_name=*.foo.com > *.foo.com.pki
+$ vault write pki/issue/anything common_name='*.foo.com' > '*.foo.com.pki'
 ```
 
 We're writing to `.pki` files, since vault outputs the certificate and
@@ -141,11 +141,11 @@ Let's now add another host in the configuration
 
 `$ nginx -p `pwd` -c conf/nginx_static.conf -s reload`
 
-`$ curl 'https://blah.com:8443' --cacert conf/certs/star_ca.pem
-Hello world!`
-`$ curl 'https://foo.com:8443' --cacert conf/certs/star_ca.pem
-Hello world!
-`
+`$ curl 'https://blah.com:8443' --cacert conf/certs/star_ca.pem`
+> Hello world!
+
+`$ curl 'https://foo.com:8443' --cacert conf/certs/star_ca.pem`
+> Hello world!
 
 Hooray! We've added a domain name using SNI, terminated the SSL
 connection for both and send it successfully to our 'Hello world'
@@ -180,13 +180,13 @@ ngx.shcache [3], a module I wrote some time ago.
 `$ nginx -p `pwd` -c conf/nginx_dynamic.conf`
 
 Using the dedicated example.foo.com cert :
-`$ curl 'https://example.foo.com:8443' --cacert $HOME/Dev/ngx_lua_ssl/conf/certs/star_ca.pem
-Hello World!`
+`$ curl 'https://example.foo.com:8443' --cacert conf/certs/star_ca.pem`
+> Hello World!
 
 Using a generic *.foo.com cert :
 
-`$ curl 'https://blog.foo.com:8443' --cacert $HOME/Dev/ngx_lua_ssl/conf/certs/star_ca.pem
-Hello World!`
+`$ curl 'https://blog.foo.com:8443' --cacert conf/certs/star_ca.pem`
+> Hello World!
 
 Voila! We've made a simple SSL termination at the edge which doesn't
 need to hot-reload Nginx all the time.
