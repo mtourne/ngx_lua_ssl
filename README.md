@@ -1,6 +1,8 @@
 How to use Nginx for SSL termination from any domain
 ====================================================
 
+(Or rather, any domain that you have the certs for!)
+
 It's pretty common for cloud services to let customers use their own
 domain names. For instance blog.mycompany.com might live on Medium's
 infrastructure.
@@ -167,6 +169,7 @@ not found a wildcard certificate. (eg. first blog.mycompany.com, then
 '*.mycompany.com'). Certs are then cached in shared memory using
 ngx.shcache [3], a module I wrote some time ago.
 
+`$ nginx -p `pwd` -c conf/nginx_dynamic.conf`
 
 Using the dedicated example.foo.com cert :
 `$ curl 'https://example.foo.com:8443' --cacert $HOME/Dev/ngx_lua_ssl/conf/certs/star_ca.pem
